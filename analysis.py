@@ -18,7 +18,7 @@ def main():
 
     print("Monthly historic of wind mean speed", end="\n\n")
     monthly = monthly_mean_speed(model)
-    print(monthly_mean_speed)
+    print(monthly, end="\n\n")
 
     print("Table of monthly wind mean speed", end="\n\n")
     monthly_table = table_from_historic(monthly)
