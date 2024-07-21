@@ -31,13 +31,17 @@ def plot_scatter_first_1000(model):
     pass
 
 def plot_scatter_greatest_speed_1000(model):
-    pass
+    pd.plotting.scatter_matrix(model.nlargest(1000, "Speed(m/s)"))
+    plt.show()
 
 def plot_histogram_speed(model):
     pass
 
 def monthly_mean_speed(model):
-    pass
+    monthly = model["Speed(m/s)"].groupby([model.index.year,
+                                           model.index.month]).mean()
+    monthly.rename_axis(index=["Year", "Month"], inplace=True)
+    return monthly
 
 def table_from_historic(monthly):
     pass
