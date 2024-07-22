@@ -1,3 +1,3 @@
-model.txt -text
 *.py text
-README.md text
+*.md text
+Data/** -text
