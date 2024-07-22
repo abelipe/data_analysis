@@ -1,10 +1,18 @@
 # Analysis of wind data
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
+
+RESULTS_DIR = "Results"
 
 def main():
     print("Loading data...", end="\n\n")
     model = read_model("Data/model.txt")
+
+    try:
+        os.mkdir(RESULTS_DIR)
+    except FileExistsError:
+        pass
 
     print("Scatter figures matrix of first 1000 records", end="\n\n")
     plot_scatter_first_1000(model)
@@ -18,7 +26,6 @@ def main():
 
     print("Monthly historic of wind mean speed", end="\n\n")
     monthly = monthly_mean_speed(model)
-    print(monthly, end="\n\n")
 
     print("Table of monthly wind mean speed", end="\n\n")
     monthly_table = table_from_historic(monthly)
@@ -41,6 +48,10 @@ def monthly_mean_speed(model):
     monthly = model["Speed(m/s)"].groupby([model.index.year,
                                            model.index.month]).mean()
     monthly.rename_axis(index=["Year", "Month"], inplace=True)
+    print(monthly, end="\n\n")
+    monthly.to_csv(RESULTS_DIR + "/mon_hist_wind_mean_speed.txt", "\t")
+    monthly.plot(legend=True, figsize=(15, 5))
+    plt.show()
     return monthly
 
 def table_from_historic(monthly):
