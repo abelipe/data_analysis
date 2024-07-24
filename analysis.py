@@ -61,10 +61,9 @@ def plot_monthly_historic(monthly_table):
     pass
 
 def read_model(path):
-    model = pd.read_csv(path, "\s+", skiprows=3,
+    model = pd.read_csv(path, sep="\s+", skiprows=3,
                         usecols=["YYYYMMDD", "HHMM", "M(m/s)", "D(deg)"],
                         parse_dates={"Timestamp": [0, 1]}, index_col="Timestamp")
-    model = model
     model.rename(columns={"M(m/s)": "Speed(m/s)",
                           "D(deg)": "Direction(deg)"},
                  inplace=True)
