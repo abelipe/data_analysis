@@ -37,25 +37,19 @@ def main():
 def plot_scatter_first_1000(model):
     # Select the first 1000 rows for "Speed(m/s)" and "Direction(deg)"
     subset = model.iloc[:1000]
-    speed = subset["Speed(m/s)"]
-    direction = subset["Direction(deg)"]
     
-    # Create a scatter plot
-    plt.scatter(speed, direction, alpha=0.2)
-    plt.xlabel("Speed(m/s)")
-    plt.ylabel("Direction(deg)")
-    plt.title("Scatter Plot of the First 1000 Records")
+    # Create a scatter_matrix plot
+    pd.plotting.scatter_matrix(subset)
+    #plt.title("Scatter Plots of the First 1000 Records")
     plt.show()
 
 def plot_scatter_greatest_speed_1000(model):
     # Select the top 1000 rows with the greatest "Speed(m/s)"
     top_speeds = model.nlargest(1000, "Speed(m/s)")
     
-    # Assuming "Direction(deg)" is the column to plot against "Speed(m/s)"
-    plt.scatter(top_speeds["Speed(m/s)"], top_speeds["Direction(deg)"], alpha=0.2)
-    plt.xlabel("Speed(m/s)")
-    plt.ylabel("Direction(deg)")
-    plt.title("Scatter Plot of the Top 1000 Speeds")
+    # Create a scatter_matrix plot
+    pd.plotting.scatter_matrix(top_speeds)
+    #plt.title("Scatter Plots of the Top 1000 Speeds")
     plt.show()
 
 def plot_histogram_speed(model):
