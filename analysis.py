@@ -75,42 +75,21 @@ def monthly_mean_speed(model):
     return monthly
 
 def table_from_historic(monthly):
-    # Debugging: Print available columns in the DataFrame
-    print("Columns in DataFrame:", monthly.columns)
+    # Pivot table to have years as rows and months as columns,
+    # from the results of monthly_mean_speed
+    pivot_table = monthly.unstack()
 
-    if isinstance(monthly.index, pd.MultiIndex):
-        # Assuming datetime information is in a specific level, e.g., level 0
-        datetime_index = pd.to_datetime(monthly.index.get_level_values(0))
-        monthly['Year'] = datetime_index.year
-        monthly['Month'] = datetime_index.month
-    else:
-        # Convert the index to a DateTimeIndex if it's not already one
-        monthly.index = pd.to_datetime(monthly.index)
-        monthly['Year'] = monthly.index.year
-        monthly['Month'] = monthly.index.month
-    
-    # Group by year and month, then calculate mean velocity
-    # Ensure 'Speed(m/s)' column exists
-    if 'Speed(m/s)' in monthly.columns:
-        monthly_mean = monthly.groupby(['Year', 'Month'])['Speed(m/s)'].mean().reset_index()
-    else:
-        raise KeyError("Column not found: 'Speed(m/s)'")
-    
-    # Pivot table to have years as rows and months as columns
-    pivot_table = monthly_mean.pivot(index='Year', columns='Month', values='Speed(m/s)')
-    
+    # Preview and save the results
+    print(pivot_table, end="\n\n")
+    pivot_table.to_csv(RESULTS_DIR + "/mon_table_wind_mean_speed.txt", "\t")
+
     return pivot_table
 
-
 def plot_monthly_historic(monthly_table):
-    # Assuming 'monthly_table' needs to be adjusted to match your description
-    # This step might be redundant or need adjustment based on the actual structure of 'monthly_table'
-    # The following line is an example based on your description and might need to be adapted
-    monthly_table = monthly_table.reset_index().pivot(index='Year', columns='Month', values='Speed(m/s)').T
+    monthly_table = monthly_table.T
     
     # Plotting
-    monthly_table.loc['Speed(m/s)'].plot(figsize=(15, 5), legend=False)
-    plt.xlabel("Year")
+    monthly_table.plot(figsize=(15, 5), linewidth=1.5)
     plt.ylabel("Mean Wind Speed (m/s)")
     plt.title("Monthly Mean Wind Speed per Year")
     plt.show()
